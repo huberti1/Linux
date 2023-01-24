@@ -49,7 +49,7 @@ elements=`ls -U $src_dir`
 if [ $dat_arg == "oldest" ]; then
   elements=`ls -Utr $src_dir`
 else
-  elements=`ls -Utr $src_dir | sort -k6 -r`
+  elements=`ls -Ut $src_dir`
 fi
 
 # Get the number of elements
