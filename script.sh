@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# this enables the ** globbing pattern which allows to match files and directories recursively
+shopt -s globstar
+
 # define default values for src and dat variables
 src="./"
 dat="newest"
