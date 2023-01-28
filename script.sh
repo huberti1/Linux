@@ -41,6 +41,9 @@ else
     files_and_dirs=($(for f in "${files_and_dirs[@]}"; do stat -c "%Y %n" "$f"; done | sort -nr | awk '{$1=""; print $0}'))
 fi
 
+echo "Files and directories count: "
+echo "(${#files_and_dirs[@]})"
+
 # calculate the number of files and directories to display
 num_to_display=$(echo "(${#files_and_dirs[@]} * 0.1)+1" | bc | awk '{print int($1)}')
 
