@@ -26,13 +26,13 @@ if [ ! -d "$src" ]; then
 fi
 
 # Get list of files and directories in the src directory
-files=$(find "$src" -maxdepth 1 -type f -or -type d | sed '1d')
+files=$(find "$src" -maxdepth 1 -type f -or -type d)
 
 # Sort files based on dat argument
 if [ "$dat" == "oldest" ]; then
-    files=$(echo "$files" | sort -n)
+    files=$(echo "$files" | sort -t ' ' -k6,7)
 else
-    files=$(echo "$files" | sort -nr)
+    files=$(echo "$files" | sort -t ' ' -k6,7 -r)
 fi
 
 # Take 10% of the files
