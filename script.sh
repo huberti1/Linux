@@ -26,13 +26,13 @@ if [ ! -d "$src" ]; then
 fi
 
 # Get list of files and directories in the src directory
-files=$(find "$src" -maxdepth 1 -type f -or -type d)
+files=$(find "$src" -maxdepth 1 -printf '%T@ %p\n')
 
 # Sort files based on dat argument
 if [ "$dat" == "oldest" ]; then
-    files=$(echo "$files" | sort -t ' ' -k6,7)
+    files=$(echo "$files" | sort -n)
 else
-    files=$(echo "$files" | sort -t ' ' -k6,7 -r)
+    files=$(echo "$files" | sort -nr)
 fi
 
 # Take 10% of the files
@@ -41,7 +41,7 @@ files_count=$((files_count/10))
 if [ $files_count -eq 0 ]; then
     files_count=1
 fi
-files=$(echo "$files" | head -n "$files_count")
+files=$(echo "$files" | head -n "$files_count" | awk '{print $2}')
 
 # Print the result
 echo "$files"
