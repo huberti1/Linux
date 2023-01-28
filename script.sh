@@ -1,47 +1,55 @@
 #!/bin/bash
 
-# Check for the presence of arguments
-if [ $# -eq 0 ]; then
-    echo "Error: No arguments provided"
-    exit 1
-fi
+# the directory to display the elements from
+src="./"
 
-# Set default values for src and dat
-src=$(pwd)
+# the order of elements to display
 dat="newest"
 
-# Parse arguments
-for arg in "$@"; do
-    case $arg in
-        src:*) src=${arg#src:} ;;
-        dat:oldest) dat="oldest" ;;
-        dat:newest) dat="newest" ;;
-    esac
+# loop through arguments
+for arg in "$@"
+do
+    # check if argument is specifying the source directory
+    if [[ $arg == src:* ]]; then
+        src=${arg#src:}
+    fi
+
+    # check if argument is specifying the sort order
+    if [[ $arg == dat:* ]]; then
+        dat=${arg#dat:}
+    fi
 done
 
-# Check if the src directory exists
+# check if source directory exists
 if [ ! -d "$src" ]; then
-    echo "Error: $src is not a valid directory"
+    echo "Error: The source directory does not exist."
     exit 1
 fi
 
-# Get list of files and directories in the src directory
-files=$(find "$src" -maxdepth 1 -printf '%T@ %p\n')
+# get the list of elements in the source directory
+elements=( $(find "$src" -maxdepth 1 -printf '%T+ %p\n' | sort -r) )
 
-# Sort files based on dat argument
+# check if there are less than 10 elements
+if [ ${#elements[@]} -lt 10 ]; then
+    for element in "${elements[@]}"
+    do
+        echo ${element#* }
+    done
+    exit 0
+fi
+
+# determine the number of elements to display
+num_elements=$(( ${#elements[@]} / 10 ))
+
+# check if sort order is oldest
 if [ "$dat" == "oldest" ]; then
-    files=$(echo "$files" | sort -n)
+    # loop through the elements in reverse order
+    for (( i=${#elements[@]}-1; i >= ${#elements[@]}-$num_elements; i-- )); do
+        echo ${elements[i]#* }
+    done
 else
-    files=$(echo "$files" | sort -nr)
+    # loop through the elements
+    for (( i=0; i < num_elements; i++ )); do
+        echo ${elements[i]#* }
+    done
 fi
-
-# Take 10% of the files
-files_count=$(echo "$files" | wc -l)
-files_count=$((files_count/10))
-if [ $files_count -eq 0 ]; then
-    files_count=1
-fi
-files=$(echo "$files" | head -n "$files_count" | awk '{print $2}')
-
-# Print the result
-echo "$files"
