@@ -32,7 +32,7 @@ if [ ! -d "$src" ]; then
 fi
 
 # get the list of files and directories in the src directory
-files_and_dirs=($src/*)
+files_and_dirs=($src/**)
 
 # check if files_and_dirs array is not empty
 if [ ${#files_and_dirs[@]} -eq 0 ]; then
