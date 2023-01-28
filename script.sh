@@ -4,6 +4,12 @@
 src="./"
 dat="newest"
 
+# check for arguments
+if [ $# -eq 0 ]; then
+  echo "Error: No arguments provided."
+  exit 1
+fi
+
 # loop through arguments passed to the script
 for arg in "$@"
 do
