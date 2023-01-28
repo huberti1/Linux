@@ -42,7 +42,7 @@ else
 fi
 
 # calculate the number of files and directories to display
-if [ ${#files_and_dirs[@]} -ld 10 ]; then
+if [ ${#files_and_dirs[@]} -lt 10 ]; then
   num_to_display=1
 else
   num_to_display=$(echo "(${#files_and_dirs[@]} * 0.1)" | bc | awk '{print int($1)}')
