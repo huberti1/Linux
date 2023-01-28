@@ -42,7 +42,11 @@ else
 fi
 
 # calculate the number of files and directories to display
-num_to_display=$(echo "(${#files_and_dirs[@]} * 0.1)+1" | bc | awk '{print int($1)}')
+if [ ${#files_and_dirs[@]} -ld 10 ]; then
+  num_to_display=1
+else
+  num_to_display=$(echo "(${#files_and_dirs[@]} * 0.1)" | bc | awk '{print int($1)}')
+fi
 
 # check if num_to_display is greater than the number of files and directories
 if [ $num_to_display -gt ${#files_and_dirs[@]} ]; then
