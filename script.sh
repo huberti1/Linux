@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# check if bc is already installed
+bc_installed=$(dpkg-query -W -f='${Status}\n' bc)
+if [[ $bc_installed != *"install ok installed"* ]]; then
+  # install bc
+  sudo apt-get install -y bc > /dev/null
+fi
+
 # this enables the ** globbing pattern which allows to match files and directories recursively
 shopt -s globstar
 
